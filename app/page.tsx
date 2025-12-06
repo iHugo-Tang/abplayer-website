@@ -201,7 +201,6 @@ export default function Home() {
           <section id="features" className="section">
             <div className="section-head">
               <h2>Core features</h2>
-              <p className="muted">From the PRD: import, mark, loop, manage, and persist.</p>
             </div>
             <div className="grid features-grid">
               {features.map((feature) => (
@@ -236,7 +235,6 @@ export default function Home() {
           <section id="shortcuts" className="section">
             <div className="section-head">
               <h2>Shortcuts & actions</h2>
-              <p className="muted">Build A-B loops into muscle memory.</p>
             </div>
             <div className="keys shortcuts-grid">
               {shortcuts.map((item) => (
