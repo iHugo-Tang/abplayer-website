@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ABPlayer Lite | A-B Loop 本地 MP3 练习工具",
+  title: "ABPlayer Lite | A-B loop practice tool for local MP3",
   description:
-    "ABPlayer Lite 聚焦本地 MP3 的 A-B Loop 练习：导入、标记、循环、保存片段，并记录练习时长。",
+    "ABPlayer Lite focuses on A-B loop practice for local MP3s: import, mark, loop, save segments, and track practice time.",
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

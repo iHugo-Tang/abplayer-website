@@ -3,80 +3,80 @@ import Link from "next/link";
 
 const features = [
   {
-    title: "音频导入与恢复",
-    desc: "单 MP3，安全书签，重启即回到上次。",
+    title: "Audio import & resume",
+    desc: "Single MP3, secure bookmark, resume instantly.",
     points: [
-      "文件选择器 + 书签存储",
-      "启动自动恢复上次文件",
-      "导入失败即时提示",
+      "File picker with bookmark storage",
+      "Auto-restore last file at launch",
+      "Instant feedback when import fails",
     ],
   },
   {
-    title: "精准 A-B 循环",
-    desc: "x / c / v 标记，B 必须晚于 A。",
+    title: "Precise A-B looping",
+    desc: "x / c / v to mark, B must follow A.",
     points: [
-      "x 设 A，c 设 B，v 清除",
-      "到 B 自动回 A 循环",
-      "滑杆拖动并显示进度",
+      "x sets A, c sets B, v clears",
+      "Loop back to A when hitting B",
+      "Scrubber drag shows progress",
     ],
   },
   {
-    title: "片段管理",
-    desc: "存片段、去重、排序、重排索引。",
+    title: "Segment management",
+    desc: "Save, dedupe, sort, and reindex segments.",
     points: [
-      "A-B 一键存，标签递增",
-      "重复起止自动去重",
-      "按起点升/降序，左右箭头跳段",
+      "One-click save A-B; labels auto-increment",
+      "Duplicate start/end are auto-deduped",
+      "Sort by start asc/desc; arrow keys to jump",
     ],
   },
   {
-    title: "播放控制",
-    desc: "流畅播放与跳转。",
+    title: "Playback controls",
+    desc: "Smooth playback and seeking.",
     points: [
-      "播放/暂停，后退 5s / 前进 10s",
-      "退出前保存 lastPlaybackTime",
-      "选片段可自动播放",
+      "Play/Pause, back 5s / forward 10s",
+      "Persist lastPlaybackTime before exit",
+      "Auto-play when selecting a segment",
     ],
   },
   {
-    title: "练习时长",
-    desc: "只在播放时计时，自动持久化。",
+    title: "Practice duration",
+    desc: "Counts only while playing; persisted automatically.",
     points: [
-      "播放中累秒并显示 Session",
-      "每 5s 与退出时写入",
-      "便于统计练习投入",
+      "Accumulates seconds during playback and shows session",
+      "Saves every 5s and on exit",
+      "Helps track practice effort",
     ],
   },
   {
-    title: "平台与版本信息",
-    desc: "macOS 原生 + 透明版本号。",
+    title: "Platform & version info",
+    desc: "Native macOS with transparent versioning.",
     points: [
       "SwiftUI + SwiftData + AVPlayer",
-      "显示版本与构建号",
-      "单窗口，专注单 MP3",
+      "Displays version and build number",
+      "Single window focused on one MP3",
     ],
   },
 ];
 
 const flowNodes = [
-  { title: "启动恢复", desc: "自动加载上次 MP3、进度与片段" },
-  { title: "导入 MP3", desc: "安全书签保存，失败即时提示" },
-  { title: "设置 A/B", desc: "x / c / v，验证 B > A" },
-  { title: "循环练习", desc: "到 B 自动回 A，滑杆可跳转" },
-  { title: "保存片段", desc: "去重、排序、左右箭头切换" },
-  { title: "退出持久化", desc: "进度与 Session 时长自动落盘" },
+  { title: "Launch & resume", desc: "Auto-load last MP3, position, and segments" },
+  { title: "Import MP3", desc: "Save secure bookmark with instant failure feedback" },
+  { title: "Set A/B", desc: "x / c / v with validation that B > A" },
+  { title: "Loop practice", desc: "Return to A at B; scrubber supports jumping" },
+  { title: "Save segments", desc: "Deduplicate, sort, switch via arrow keys" },
+  { title: "Persist on exit", desc: "Persist progress and session time automatically" },
 ];
 
 const shortcuts = [
-  { keys: ["X"], label: "设置 A 点" },
-  { keys: ["C"], label: "设置 B 点" },
-  { keys: ["V"], label: "清除 A/B" },
-  { keys: ["←"], label: "上一段" },
-  { keys: ["→"], label: "下一段" },
-  { keys: ["Space"], label: "播放 / 暂停" },
-  { keys: ["⌘", "O"], label: "导入 MP3" },
-  { keys: ["f", "5s"], label: "后退 5 秒" },
-  { keys: ["g", "10s"], label: "前进 10 秒" },
+  { keys: ["X"], label: "Set point A" },
+  { keys: ["C"], label: "Set point B" },
+  { keys: ["V"], label: "Clear A/B" },
+  { keys: ["←"], label: "Previous segment" },
+  { keys: ["→"], label: "Next segment" },
+  { keys: ["Space"], label: "Play / Pause" },
+  { keys: ["⌘", "O"], label: "Import MP3" },
+  { keys: ["f", "5s"], label: "Back 5 seconds" },
+  { keys: ["g", "10s"], label: "Forward 10 seconds" },
 ];
 
 const dataModels = [
@@ -84,7 +84,7 @@ const dataModels = [
     name: "AudioFile",
     fields: [
       "displayName",
-      "bookmarkData（安全范围存储）",
+      "bookmarkData (sandbox-safe bookmark)",
       "createdAt",
       "segments: LoopSegment[]",
       "lastPlaybackTime: Double",
@@ -93,16 +93,16 @@ const dataModels = [
   {
     name: "LoopSegment",
     fields: [
-      "label（自动递增）",
-      "startTime / endTime（去重相同起止）",
-      "index（删除后重新编号）",
+      "label (auto-increment)",
+      "startTime / endTime (dedupe identical ranges)",
+      "index (renumber after delete)",
       "createdAt",
-      "audioFile（关联）",
+      "audioFile (relation)",
     ],
   },
   {
     name: "ListeningSession",
-    fields: ["startedAt", "durationSeconds（播放中累加）", "endedAt"],
+    fields: ["startedAt", "durationSeconds (accumulates while playing)", "endedAt"],
   },
 ];
 
@@ -121,15 +121,15 @@ export default function Home() {
             />
             <div>
               <div className="brand-name">ABPlayer Lite</div>
-              <div className="brand-sub">A-B Loop · 本地 MP3</div>
+              <div className="brand-sub">A-B Loop · Local MP3</div>
             </div>
           </div>
           <div className="top-actions">
             <Link className="btn ghost" href="#features">
-              产品特性
+              Features
             </Link>
             <Link className="btn ghost" href="#shortcuts">
-              快捷键
+              Shortcuts
             </Link>
             <Link
               className="btn ghost"
@@ -137,7 +137,7 @@ export default function Home() {
               target="_blank"
               rel="noreferrer"
             >
-              开源仓库
+              Source code
             </Link>
             <Link
               className="btn primary"
@@ -145,7 +145,7 @@ export default function Home() {
               target="_blank"
               rel="noreferrer"
             >
-              下载 Release
+              Download release
             </Link>
           </div>
         </header>
@@ -154,10 +154,11 @@ export default function Home() {
           <section className="hero" id="top">
             <div>
               <div className="eyebrow">A-B Loop practice · macOS</div>
-              <h1>导入、标记、循环，打磨每一句 MP3 片段。</h1>
+              <h1>Import, mark, and loop to polish every MP3 phrase.</h1>
               <p className="muted">
-                专为语言学习、短语操练、听力跟读而生的 A-B 循环工具。
-                单文件导入、快捷键标记，退出后自动恢复进度与片段，练习时长实时累积。
+                Built for language learning, phrase drills, and shadowing. Import a single file, mark
+                with hotkeys, resume progress and segments after exit, and accumulate practice time
+                in real time.
               </p>
               <div className="cta-row">
                 <Link
@@ -166,16 +167,16 @@ export default function Home() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  下载最新版本（GitHub Releases）
+                  Download latest version (GitHub Releases)
                 </Link>
                 <Link className="btn ghost" href="#preview">
-                  查看界面预览
+                  View UI preview
                 </Link>
               </div>
               <div className="pill-row">
-                <span className="pill">记住上次文件</span>
-                <span className="pill">快捷键</span>
-                <span className="pill">记录练习时长</span>
+                <span className="pill">Remember last file</span>
+                <span className="pill">Hotkeys</span>
+                <span className="pill">Track practice time</span>
               </div>
             </div>
 
@@ -183,7 +184,7 @@ export default function Home() {
               <div className="preview-frame">
                 <Image
                   src="/images/preview.png"
-                  alt="ABPlayer Lite 预览界面"
+                  alt="ABPlayer Lite preview"
                   fill
                   sizes="(min-width: 1024px) 560px, 100vw"
                   priority
@@ -191,18 +192,16 @@ export default function Home() {
                 />
               </div>
               <div className="preview-caption">
-                <span className="pill">A-B Loop 练习</span>
-                <span className="muted">
-                  段落列表、Session 时长与进度一目了然
-                </span>
+                <span className="pill">A-B Loop practice</span>
+                <span className="muted">Segment list, session time, and progress at a glance</span>
               </div>
             </div>
           </section>
 
           <section id="features" className="section">
             <div className="section-head">
-              <h2>核心功能</h2>
-              <p className="muted">摘自 PRD：导入、标记、循环、管理与持久化。</p>
+              <h2>Core features</h2>
+              <p className="muted">From the PRD: import, mark, loop, manage, and persist.</p>
             </div>
             <div className="grid features-grid">
               {features.map((feature) => (
@@ -221,7 +220,7 @@ export default function Home() {
 
           <section id="flows" className="section">
             <div className="section-head">
-              <h2>关键流程</h2>
+              <h2>Key flows</h2>
             </div>
             <div className="flow-chart">
               {flowNodes.map((node, idx) => (
@@ -236,8 +235,8 @@ export default function Home() {
 
           <section id="shortcuts" className="section">
             <div className="section-head">
-              <h2>快捷键与操作</h2>
-              <p className="muted">将 A-B 循环变成肌肉记忆。</p>
+              <h2>Shortcuts & actions</h2>
+              <p className="muted">Build A-B loops into muscle memory.</p>
             </div>
             <div className="keys shortcuts-grid">
               {shortcuts.map((item) => (
@@ -258,10 +257,10 @@ export default function Home() {
           <section id="download" className="section">
             <div className="card cta-card">
               <div className="eyebrow">Ready for practice</div>
-              <h2 style={{ margin: "6px 0" }}>下载与开源</h2>
+              <h2 style={{ margin: "6px 0" }}>Download & open source</h2>
               <p className="muted">
-                macOS 原生体验，单文件导入、精准 A-B 标记、片段复用与 Session
-                计时。专注把每一次练习时间花在声音上，而不是界面上。
+                Native macOS experience with single-file import, precise A-B markers, reusable
+                segments, and session timing. Stay focused on sound, not UI.
               </p>
               <div className="cta-row">
                 <Link
@@ -270,7 +269,7 @@ export default function Home() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  前往下载（GitHub Releases）
+                  Get it on GitHub Releases
                 </Link>
                 <Link
                   className="btn ghost"
@@ -278,22 +277,21 @@ export default function Home() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  查看开源代码
+                  View source code
                 </Link>
               </div>
               <div className="meta-row">
                 <span className="pill">macOS 14+</span>
                 <span className="pill">SwiftUI · SwiftData · AVPlayer</span>
-                <span className="pill">仅 MP3 · 单窗口</span>
-                <span className="pill">开源：GitHub / Releases</span>
+                <span className="pill">MP3 only · single window</span>
+                <span className="pill">Open source: GitHub / Releases</span>
               </div>
             </div>
           </section>
         </main>
 
         <footer>
-          ABPlayer Lite · A-B Loop 练习工具 · Version 0.0.1
-          （nightly-202512050245）。
+          ABPlayer Lite · A-B loop practice tool · Version 0.0.1 (nightly-202512050245).
         </footer>
       </div>
     </div>
